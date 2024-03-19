@@ -8,9 +8,14 @@ import {
 } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<App />}></Route>)
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<HomePage />} />
+    </Route>
+  )
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

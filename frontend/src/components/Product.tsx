@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Rating from "./Rating";
 
 export default function Product({ product }) {
   return (
@@ -18,7 +19,7 @@ export default function Product({ product }) {
             </strong>
           </div>
         </Link>
-        {/* <Rating value={product.rating} text={`${product.numReviews} reviews`} /> */}
+        <Rating value={product.rating} text={`${product.numReviews} reviews`} />
         <h3>${product.price}</h3>
       </div>
     </div>
