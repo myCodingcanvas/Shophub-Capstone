@@ -13,7 +13,9 @@ const Header = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           {/* <img src={logo} alt="logo" /> */}
-          <h1 className="text-3xl font-bold text-white">ShopHub</h1>
+          <Link to="/">
+            <h1 className="text-3xl font-bold text-white">ShopHub</h1>
+          </Link>
         </div>
         <div className="hidden items-center space-x-4 font-bold md:flex text-gray-300">
           <Link className="flex items-center space-x-1" to="/cart">
