@@ -12,7 +12,7 @@ export default function Product({ product }) {
         <img src={product.image} alt="" className="rounded" />
       </Link>
       <div>
-        <Link to={`/prodcut/${product.id}`}>
+        <Link to={`/product/${product.id}`}>
           <div className="text-xl overflow-hidden whitespace-nowrap">
             <strong className="block max-w-[100%] overflow-hidden text-ellipsis">
               {product.name}
