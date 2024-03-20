@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import products from "../data/products";
+import { useAppDispatch } from "../hooks";
+import { addToCart } from "../slices/cartSlice";
 
 const ProductPage = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const product = products.find((p) => p.id === productId);
 
   const [qty, setQty] = useState(1);
 
   const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty }));
     navigate("/cart");
   };
 

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../hooks";
 
 const Header = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const toggleMobileMenuHandler = () => {
     setOpenMobileMenu(!openMobileMenu);
   };
+
+  const { cartItems } = useAppSelector((state) => state.cart);
+  // console.log(cartItems);
 
   return (
     <nav className="relative w-full px-5 py-5 mx-auto md:px-6 md:py-6 bg-gray-800 text-white ">
@@ -22,6 +26,11 @@ const Header = () => {
             <FaShoppingCart />
             <div className="flex space-x-1 items-center">
               <p>Cart</p>
+              {cartItems.length > 0 && (
+                <div className="bg-green-700 rounded-full px-2 ml-1">
+                  {cartItems.reduce((a, c) => a + c.qty, 0)}
+                </div>
+              )}
             </div>
           </Link>
           <Link className="flex items-center space-x-1" to="/login">
