@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICart, ICartItems } from "../types";
+import { updateCart } from "../utils/cartUtils";
 
 const initialState: ICart = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart") || '""')
@@ -22,18 +23,15 @@ const cartSlice = createSlice({
         state.cartItems = [...state.cartItems, item];
       }
 
-      localStorage.setItem("cart", JSON.stringify(state));
-      return state;
+      return updateCart(state);
     },
     removeFromCart: (state: ICart, action: PayloadAction<number>) => {
       state.cartItems = state.cartItems.filter((x) => x.id !== action.payload);
-      localStorage.setItem("cart", JSON.stringify(state));
-      return state;
+      return updateCart(state);
     },
     clearCartItems: (state: ICart) => {
       state.cartItems = [];
-      localStorage.setItem("cart", JSON.stringify(state));
-      return state;
+      return updateCart(state);
     },
   },
 });
