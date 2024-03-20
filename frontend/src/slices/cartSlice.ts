@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICart, ICartItems } from "../types";
-import { updateCart } from "../utils/cartUtils";
 
 const initialState: ICart = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart") || '""')
