@@ -1,22 +1,40 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import products from "../data/products";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart } from "../slices/cartSlice";
+import { ICartItems } from "../types";
 
 const ProductPage = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { cartItems } = useAppSelector((state) => state.cart);
+
   const product = products.find((p) => p.id === productId);
 
   const [qty, setQty] = useState(1);
+  const [allowedQty, setAllowedQty] = useState(0);
+  useLayoutEffect(() => {
+    const existItem = cartItems.find((x) => x.id === product.id);
+    if (existItem) {
+      setAllowedQty(product?.countInStock - existItem.qty);
+    } else {
+      setAllowedQty(product?.countInStock);
+    }
+  }, [product, cartItems]);
 
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
+    const existItem = cartItems.find((x) => x.id === product.id);
+
+    let newCartItem = { ...product, qty };
+    if (existItem) {
+      newCartItem = { ...product, qty: existItem.qty + qty };
+    }
+    setAllowedQty(allowedQty - qty);
+    dispatch(addToCart(newCartItem));
   };
 
   return (
@@ -65,7 +83,7 @@ const ProductPage = () => {
                   onChange={(e) => setQty(Number(e.target.value))}
                   className="block px-2 w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring"
                 >
-                  {[...Array(product.countInStock).keys()].map((x) => (
+                  {[...Array(allowedQty).keys()].map((x) => (
                     <option key={x + 1} value={x + 1}>
                       {x + 1}
                     </option>
