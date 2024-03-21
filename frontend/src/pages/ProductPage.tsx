@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Rating from "../components/Rating";
 import products from "../data/products";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -35,6 +36,7 @@ const ProductPage = () => {
     }
     setAllowedQty(allowedQty - qty);
     dispatch(addToCart(newCartItem));
+    toast.success("Item added to cart successfully!");
   };
 
   return (
@@ -73,7 +75,7 @@ const ProductPage = () => {
               {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
             </strong>
           </div>
-          {product.countInStock > 0 && (
+          {product.countInStock > 0 && allowedQty > 0 && (
             <div className="flex justify-between w-full border border-solid rounded-sm p-4">
               <p>Qty</p>
               <div>
@@ -91,6 +93,11 @@ const ProductPage = () => {
                 </select>
               </div>
             </div>
+          )}
+          {allowedQty < 1 && (
+            <p className="w-full border border-solid rounded-sm p-4 text-center">
+              Everything in cart
+            </p>
           )}
           <div className="w-full border border-solid rounded-sm p-4 text-center">
             <button
