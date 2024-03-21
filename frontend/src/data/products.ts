@@ -1,15 +1,5 @@
-interface IProduct {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  brand: string;
-  category: string;
-  price: number;
-  countInStock: number;
-  rating?: number;
-  numReviews: number;
-}
+import { IProduct } from "../types";
+
 export const products: IProduct[] = [
   {
     id: "1",

@@ -1,9 +1,11 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { IProduct } from "../types";
 
 const CartPage = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +35,7 @@ const CartPage = () => {
           <div className="md:basis-8/12 flex flex-col justify-center items-center">
             <h1>Shopping Cart</h1>
             <div className="w-full md:px-10">
-              {cartItems.map((item) => (
+              {cartItems.map((item: IProduct) => (
                 <div
                   key={item.id}
                   className="flex flex-col divide-y-2 md:flex-row md:items-center md:justify-center  md:divide-y-0 my-3 px-4 md:px-10 pb-4 space-y-4 border-b last:border-b-0"
@@ -53,24 +55,28 @@ const CartPage = () => {
                     {item.name}
                   </Link>
                   <p className="p-2 text-left w-full">${item.price}</p>
-                  <div className="flex justify-between w-full p-4">
-                    <p>Qty</p>
-                    <div>
-                      <select
-                        name=""
-                        value={item.qty}
-                        onChange={(e) =>
-                          addtoCartHandler(item, Number(e.target.value))
-                        }
-                        className="block px-2 w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring"
-                      >
-                        {[...Array(item.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  <div className="flex justify-between items-center w-full p-4 space-x-3">
+                    <button
+                      className={`py-1 flex items-center justify-center border rounded-sm bg-gray-200 md:min-w-[30px] hover:bg-gray-300 ${
+                        item.qty === 1 &&
+                        "opacity-45 pointer-events-none bg-slate-300"
+                      }`}
+                      type="button"
+                      onClick={(e) => addtoCartHandler(item, item.qty - 1)}
+                    >
+                      <FaMinus />
+                    </button>
+                    <p>{item.qty}</p>
+                    <button
+                      className={`py-1 flex items-center justify-center border rounded-sm bg-gray-200 md:min-w-[30px] hover:bg-gray-300 ${
+                        item.qty === item.countInStock &&
+                        "opacity-45 pointer-events-none bg-slate-300"
+                      }`}
+                      type="button"
+                      onClick={(e) => addtoCartHandler(item, item.qty + 1)}
+                    >
+                      <FaPlus />
+                    </button>
                   </div>
                   <button
                     className="py-2 flex items-center justify-center border rounded-sm bg-gray-200 md:min-w-[50px] hover:bg-gray-300"
