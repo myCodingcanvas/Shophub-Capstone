@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICart, ICartItems } from "../types";
+import { ICart, ICartItems, IShippingAddress } from "../types";
 import { updateCart } from "../utils/cartUtils";
 
 const initialState: ICart = localStorage.getItem("cart")
@@ -33,9 +33,21 @@ const cartSlice = createSlice({
       state.cartItems = [];
       return updateCart(state);
     },
+    saveShippingAddress: (
+      state: ICart,
+      action: PayloadAction<IShippingAddress>
+    ) => {
+      state.shippingAddress = action.payload;
+      return updateCart(state);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, clearCartItems } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  clearCartItems,
+  saveShippingAddress,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -8,9 +8,16 @@ export interface ICartItems {
   qty?: number;
 }
 
+export interface IShippingAddress {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
 export interface ICart {
   cartItems: ICartItems[];
-  shippingAddress: {};
+  shippingAddress: IShippingAddress;
   paymentMethod: string;
   itemsTotalPrice?: number;
   shippingTotalPrice?: number;

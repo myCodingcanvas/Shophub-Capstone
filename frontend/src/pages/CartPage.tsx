@@ -2,6 +2,7 @@ import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
@@ -9,6 +10,7 @@ import { IProduct } from "../types";
 
 const CartPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const cart = useAppSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -19,6 +21,10 @@ const CartPage = () => {
 
   const removeFromCartHandler = async (id) => {
     dispatch(removeFromCart(id));
+  };
+
+  const checkoutHandler = () => {
+    navigate("/shipping");
   };
 
   return (
@@ -106,6 +112,7 @@ const CartPage = () => {
                 cartItems.length === 0 &&
                 "opacity-85 pointer-events-none bg-slate-300"
               }`}
+              onClick={checkoutHandler}
             >
               Proceed To Checkout
             </button>
