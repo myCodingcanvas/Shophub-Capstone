@@ -69,7 +69,7 @@ const CartPage = () => {
                     <p>{item.qty}</p>
                     <button
                       className={`py-1 flex items-center justify-center border rounded-sm bg-gray-200 md:min-w-[30px] hover:bg-gray-300 ${
-                        item.qty === item.countInStock &&
+                        item.qty >= item.countInStock &&
                         "opacity-45 pointer-events-none bg-slate-300"
                       }`}
                       type="button"
