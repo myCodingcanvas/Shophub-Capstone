@@ -102,7 +102,7 @@ const ProductPage = () => {
           <div className="w-full border border-solid rounded-sm p-4 text-center">
             <button
               className={`bg-gray-700 text-white p-3 w-[50%] hover:bg-gray-600 border border-solid rounded-lg md:w-full ${
-                product.countInStock === 0 &&
+                (product.countInStock === 0 || allowedQty < 1) &&
                 "opacity-85 pointer-events-none bg-slate-300"
               }`}
               onClick={addToCartHandler}
