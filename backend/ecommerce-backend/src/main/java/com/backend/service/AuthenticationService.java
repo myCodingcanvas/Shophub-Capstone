@@ -57,11 +57,22 @@ public class AuthenticationService {
 		// save the generated token
 		saveUserToken(user, jwt);
 		
-		return new AuthenticationResponse(jwt);
+		AuthenticationResponse authResponseDto = generateAuthenticationResponse(user, jwt);
+		
+		return authResponseDto;
 		
 	}
 
-	
+	private AuthenticationResponse generateAuthenticationResponse(UserEntity user, String jwt) {
+		AuthenticationResponse authResponseDto = new AuthenticationResponse();
+		authResponseDto.setFirstName(user.getFirstName());
+		authResponseDto.setLastName(user.getLastName());
+		authResponseDto.setEmail(user.getEmail());
+		authResponseDto.setUsername(user.getUsername());
+		authResponseDto.setRole(user.getRole());
+		authResponseDto.setToken(jwt);
+		return authResponseDto;
+	}
 	
 	public AuthenticationResponse authenticate(UserEntity request) {
 		authenticationManager.authenticate(
@@ -73,7 +84,9 @@ public class AuthenticationService {
 		// save the generated token
 		saveUserToken(user, token);
 		
-		return new AuthenticationResponse(token);
+		AuthenticationResponse authResponseDto = generateAuthenticationResponse(user, token);
+		
+		return authResponseDto;
 	}
 
 	private void revokeAllTokenByUser(UserEntity user) {
