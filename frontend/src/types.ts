@@ -26,7 +26,7 @@ export interface ICart {
 }
 
 export interface IProduct {
-  id: string;
+  productId: string;
   name: string;
   image: string;
   description: string;
@@ -34,7 +34,7 @@ export interface IProduct {
   category: string;
   price: number;
   countInStock: number;
-  rating?: number;
+  rating: number;
   numReviews: number;
   qty?: number;
 }

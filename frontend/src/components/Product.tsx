@@ -1,18 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
+import { IProduct } from "../types";
 
-export default function Product({ product }) {
+interface ProductProps {
+  product: IProduct;
+}
+
+export default function Product({ product }: ProductProps) {
   return (
     <div
       className="my-3 p-3 mx-auto rounded border border-solid border-gray-400 shadow-md"
       style={{ maxWidth: "500px" }}
     >
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/product/${product.productId}`}>
         <img src={product.image} alt="" className="rounded" />
       </Link>
       <div>
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${product.productId}`}>
           <div className="text-xl overflow-hidden whitespace-nowrap">
             <strong className="block max-w-[100%] overflow-hidden text-ellipsis">
               {product.name}
