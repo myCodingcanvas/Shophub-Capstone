@@ -1,28 +1,63 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { useLoginMutation } from "../slices/userApiSlice";
+import { setCredentials } from "../slices/authSlice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { userInfo } = useAppSelector((state) => state.auth);
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get("redirect") || "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await login({ username, password }).unwrap();
+      console.log("Response received ", res);
+      dispatch(setCredentials(res));
+      navigate(redirect);
+    } catch (err) {
+      toast.error("Failed to Login.");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center mt-4">
       <div className="w-full max-w-[28rem]">
         <h1 className="mb-5 text-3xl text-center">Sign In</h1>
-        <form className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4">
+        <form
+          onSubmit={submitHandler}
+          className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+        >
           <div className="mb-4">
             <label
               htmlFor="email"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Email Address
+              Username
             </label>
             <input
-              type="email"
-              id="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              placeholder="Enter Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -45,7 +80,8 @@ const LoginPage = () => {
           <div className="flex flex-col items-center justify-between space-y-3">
             <button
               type="submit"
-              className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-[50%]"
+              className={`bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-[50%]
+              ${isLoading && " opacity-85 pointer-events-none bg-slate-300"}`}
             >
               Sign In
             </button>

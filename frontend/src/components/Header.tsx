@@ -10,7 +10,7 @@ const Header = () => {
   };
 
   const { cartItems } = useAppSelector((state) => state.cart);
-  // console.log(cartItems);
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   return (
     <nav className="relative w-full px-5 py-5 mx-auto md:px-6 md:py-6 bg-gray-800 text-white ">
@@ -33,10 +33,21 @@ const Header = () => {
               )}
             </div>
           </Link>
-          <Link className="flex items-center space-x-1" to="/login">
-            <FaUser />
-            <div>Login</div>
-          </Link>
+          {!userInfo ? (
+            <Link className="flex w-full items-center space-x-2" to="/login">
+              <FaUser />
+              <div>Login</div>
+            </Link>
+          ) : (
+            <Link
+              className="flex w-full items-center space-x-2"
+              to={`/profile/${userInfo.username}`}
+            >
+              <FaUser />
+              <div>{userInfo.username}</div>
+              <div className="hover:cursor-pointer">Logout</div>
+            </Link>
+          )}
         </div>
         <button
           className={`${
@@ -60,10 +71,21 @@ const Header = () => {
                 <p>Cart</p>
               </div>
             </Link>
-            <Link className="flex w-full items-center space-x-2" to="/login">
-              <FaUser />
-              <div>Login</div>
-            </Link>
+            {!userInfo ? (
+              <Link className="flex w-full items-center space-x-2" to="/login">
+                <FaUser />
+                <div>Login</div>
+              </Link>
+            ) : (
+              <Link
+                className="flex w-full items-center space-x-2"
+                to={`/profile/${userInfo.username}`}
+              >
+                <FaUser />
+                <div>{userInfo.username}</div>
+                <div className="hover:cursor-pointer">Logout</div>
+              </Link>
+            )}
           </div>
         </div>
       </div>

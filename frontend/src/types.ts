@@ -38,3 +38,21 @@ export interface IProduct {
   numReviews: number;
   qty?: number;
 }
+
+export interface IUser {
+  token: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  role: string;
+}
+
+export interface IAuthState {
+  userInfo: IUser | null;
+}
+
+export interface ILoginRequest {
+  username: string;
+  password: string;
+}
