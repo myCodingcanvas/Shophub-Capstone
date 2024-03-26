@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { useLogoutMutation } from "../slices/userApiSlice";
+import { logout } from "../slices/authSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -11,6 +14,21 @@ const Header = () => {
 
   const { cartItems } = useAppSelector((state) => state.cart);
   const { userInfo } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  const [logoutApiCall, { error }] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      const res = await logoutApiCall().unwrap();
+      console.log(res);
+      dispatch(logout());
+      toast.success(res.message);
+    } catch (err) {
+      toast.error("Failed to Logout " + error);
+    }
+  };
 
   return (
     <nav className="relative w-full px-5 py-5 mx-auto md:px-6 md:py-6 bg-gray-800 text-white ">
@@ -39,14 +57,18 @@ const Header = () => {
               <div>Login</div>
             </Link>
           ) : (
-            <Link
-              className="flex w-full items-center space-x-2"
-              to={`/profile/${userInfo.username}`}
-            >
-              <FaUser />
-              <div>{userInfo.username}</div>
-              <div className="hover:cursor-pointer">Logout</div>
-            </Link>
+            <>
+              <Link
+                className="flex w-full items-center space-x-2"
+                to={`/profile/${userInfo.username}`}
+              >
+                <FaUser />
+                <div>{userInfo.username}</div>
+              </Link>
+              <div className="hover:cursor-pointer" onClick={logoutHandler}>
+                Logout
+              </div>
+            </>
           )}
         </div>
         <button
@@ -77,14 +99,18 @@ const Header = () => {
                 <div>Login</div>
               </Link>
             ) : (
-              <Link
-                className="flex w-full items-center space-x-2"
-                to={`/profile/${userInfo.username}`}
-              >
-                <FaUser />
-                <div>{userInfo.username}</div>
-                <div className="hover:cursor-pointer">Logout</div>
-              </Link>
+              <>
+                <Link
+                  className="flex w-full items-center space-x-2"
+                  to={`/profile/${userInfo.username}`}
+                >
+                  <FaUser />
+                  <div>{userInfo.username}</div>
+                </Link>
+                <div className="hover:cursor-pointer" onClick={logoutHandler}>
+                  Logout
+                </div>
+              </>
             )}
           </div>
         </div>

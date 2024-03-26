@@ -1,5 +1,5 @@
-import { LOGIN_URL } from "../constants";
-import { ILoginRequest, IUser } from "../types";
+import { LOGIN_URL, LOGOUT_URL } from "../constants";
+import { ILoginRequest, IMessage, IUser } from "../types";
 import { apiSlice } from "./apiSlice";
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -11,7 +11,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    logout: builder.mutation<IMessage, void>({
+      query: () => {
+        const userInfo: IUser = localStorage.getItem("userInfo")
+          ? JSON.parse(localStorage.getItem("userInfo") || "{}")
+          : null;
+        const token = userInfo.token;
+        return {
+          url: LOGOUT_URL,
+          method: "POST",
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = userApiSlice;
+export const { useLoginMutation, useLogoutMutation } = userApiSlice;
