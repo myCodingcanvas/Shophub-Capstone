@@ -7,5 +7,6 @@ import com.backend.model.ProductEntity;
 public interface ProductService {
 	
 	List<ProductEntity> getAllProducts();
+	ProductEntity getProductById(int id);
 
 }

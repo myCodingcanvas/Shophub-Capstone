@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend.exceptions.ProductNotFoundException;
 import com.backend.model.ProductEntity;
 import com.backend.repository.ProductRepository;
 import com.backend.service.ProductService;
@@ -21,6 +22,10 @@ public class ProductServiceImpl implements ProductService{
 		return allProducts;
 	}
 
-	
+	@Override
+	public ProductEntity getProductById(int id) {
+		ProductEntity product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with given Id not found"));
+		return product;
+	}
 
 }
