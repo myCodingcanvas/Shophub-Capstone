@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,10 +17,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.backend.filter.JwtAuthenticationFilter;
 import com.backend.service.UserDetailsServiceImp;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -60,9 +64,30 @@ public class SecurityConfig {
 				.userDetailsService(userDetailsServiceImp)
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.logout(l -> l.logoutUrl("/logout")
-						.addLogoutHandler(logoutHandler)
-						.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
+				.logout(l ->
+				l.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout", "POST"))
+			// l.logoutUrl("/logout")
+			.addLogoutHandler(logoutHandler)
+//			 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
+			.logoutSuccessHandler((request, response, authentication) -> {
+				System.out.println("Logout Success Handler " + request.getHeader("Authorization"));
+                if(request.getHeader("Authorization") == null) {
+                	response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                	response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    
+                    // Custom message for failed logout
+                    String customMessage = "{\"message\": \"Logout failed. Not Authenticated/Authorized\"}";
+                    response.getWriter().write(customMessage);
+                	return;
+                }
+				SecurityContextHolder.clearContext();
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                
+                // Custom message for logout
+                String customMessage = "{\"message\": \"Logout successful\"}";
+                response.getWriter().write(customMessage);
+            }))
 				.build();
 	}
 	
