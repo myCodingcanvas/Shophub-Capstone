@@ -5,7 +5,7 @@ export interface ICartItems {
   taxPrice: number;
   totalPrice: number;
   price?: number;
-  qty?: number;
+  qty: number;
 }
 
 export interface IShippingAddress {
