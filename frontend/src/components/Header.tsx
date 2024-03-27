@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import { clearCartItems } from "../slices/cartSlice";
 
 const Header = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -24,6 +25,7 @@ const Header = () => {
       const res = await logoutApiCall().unwrap();
       console.log(res);
       dispatch(logout());
+      dispatch(clearCartItems());
       toast.success(res.message);
     } catch (err) {
       toast.error("Failed to Logout " + error);
