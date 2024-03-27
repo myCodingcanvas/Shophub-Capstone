@@ -1,11 +1,10 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 interface ICheckoutStepsProps {
-  step1: boolean;
-  step2: boolean;
-  step3: boolean;
-  step4: boolean;
+  step1?: boolean;
+  step2?: boolean;
+  step3?: boolean;
+  step4?: boolean;
 }
 
 const CheckoutSteps = ({ step1, step2, step3, step4 }: ICheckoutStepsProps) => {
@@ -16,7 +15,11 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: ICheckoutStepsProps) => {
           Sign In
         </Link>
       ) : (
-        <Link className="text-gray-400 mx-4" style={{ pointerEvents: "none" }}>
+        <Link
+          to="/login"
+          className="text-gray-400 mx-4"
+          style={{ pointerEvents: "none" }}
+        >
           Sign In
         </Link>
       )}
@@ -25,7 +28,11 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: ICheckoutStepsProps) => {
           Shipping
         </Link>
       ) : (
-        <Link className="text-gray-400 mx-4" style={{ pointerEvents: "none" }}>
+        <Link
+          to="/shipping"
+          className="text-gray-400 mx-4"
+          style={{ pointerEvents: "none" }}
+        >
           Shipping
         </Link>
       )}
@@ -34,7 +41,11 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: ICheckoutStepsProps) => {
           Payment
         </Link>
       ) : (
-        <Link className="text-gray-400 mx-4" style={{ pointerEvents: "none" }}>
+        <Link
+          to="/payment"
+          className="text-gray-400 mx-4"
+          style={{ pointerEvents: "none" }}
+        >
           Payment
         </Link>
       )}
@@ -43,7 +54,11 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: ICheckoutStepsProps) => {
           Place Order
         </Link>
       ) : (
-        <Link className="text-gray-400 mx-4" style={{ pointerEvents: "none" }}>
+        <Link
+          to="/placeorder"
+          className="text-gray-400 mx-4"
+          style={{ pointerEvents: "none" }}
+        >
           Place Order
         </Link>
       )}

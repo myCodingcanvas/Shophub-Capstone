@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -40,6 +41,7 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center mt-4">
       <div className="w-full max-w-[28rem]">
+        {isLoading && <Loader />}
         <h1 className="mb-5 text-3xl text-center">Sign In</h1>
         <form
           onSubmit={submitHandler}

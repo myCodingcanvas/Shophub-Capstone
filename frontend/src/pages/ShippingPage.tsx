@@ -4,6 +4,7 @@ import { saveShippingAddress } from "../slices/cartSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { ICart } from "../types";
+import { toast } from "react-toastify";
 
 const ShippingPage = () => {
   const cart: ICart = useAppSelector((state) => state.cart);
@@ -19,10 +20,14 @@ const ShippingPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (address === "" || city === "" || postalCode === "" || country === "") {
+      toast.error("Please provide all the fields.");
+      return;
+    }
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate("/payment");
+    navigate("/login?redirect=/payment");
   };
 
   return (

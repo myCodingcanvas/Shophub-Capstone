@@ -2,6 +2,7 @@ import React from "react";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productApiSlice";
 import { IProduct } from "../types";
+import Loader from "../components/Loader";
 
 export default function HomePage() {
   const { data: products, isLoading, error } = useGetProductsQuery();
@@ -11,7 +12,7 @@ export default function HomePage() {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
         <h2>Error...</h2>
       ) : (

@@ -1,17 +1,17 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Rating from "../components/Rating";
-import products from "../data/products";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart } from "../slices/cartSlice";
 import { ICartItems } from "../types";
 import { useGetProductByIdQuery } from "../slices/productApiSlice";
 import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 const ProductPage = () => {
   const { id: productId } = useParams();
-  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
 
   const { cartItems } = useAppSelector((state) => state.cart);
@@ -46,6 +46,7 @@ const ProductPage = () => {
 
       const newCartItem: ICartItems = {
         id: parseInt(product.productId),
+        product, // add product to display product info in cart?
         price: product.price,
         qty: existItem ? existItem.qty + qty : qty,
         itemsPrice: product.price * qty,
@@ -70,7 +71,7 @@ const ProductPage = () => {
         Go Back
       </Link>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <Loader />
       ) : error || !product ? (
         <Message variant="danger">Error</Message>
       ) : (

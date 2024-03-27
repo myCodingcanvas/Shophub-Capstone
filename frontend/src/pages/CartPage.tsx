@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -6,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
-import { IProduct } from "../types";
+import { ICartItems } from "../types";
 
 const CartPage = () => {
   const dispatch = useAppDispatch();
@@ -15,16 +14,16 @@ const CartPage = () => {
   const cart = useAppSelector((state) => state.cart);
   const { cartItems } = cart;
 
-  const addtoCartHandler = async (product, qty) => {
+  const addtoCartHandler = async (product: ICartItems, qty: number) => {
     dispatch(addToCart({ ...product, qty }));
   };
 
-  const removeFromCartHandler = async (id) => {
+  const removeFromCartHandler = async (id: number) => {
     dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
-    navigate("/shipping");
+    navigate("/login?redirect=/shipping");
   };
 
   return (
@@ -41,15 +40,15 @@ const CartPage = () => {
           <div className="md:basis-8/12 flex flex-col justify-center items-center">
             <h1>Shopping Cart</h1>
             <div className="w-full md:px-10">
-              {cartItems.map((item: IProduct) => (
+              {cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.product.productId}
                   className="flex flex-col divide-y-2 md:flex-row md:items-center md:justify-center  md:divide-y-0 my-3 px-4 md:px-10 pb-4 space-y-4 border-b last:border-b-0"
                 >
                   <div className="flex justify-center items-center bg-red-200">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item.product.image}
+                      alt={item.product.name}
                       // style={{ maxWidth: '75px', maxHeight: '75px' }}
                       className="md:max-w-[80px] md:max-h-[80px]"
                     />
@@ -58,7 +57,7 @@ const CartPage = () => {
                     to={`/product/${item.id}`}
                     className="p-2 flex flex-col justify-center text-left md:flex-row md:items-center md:min-w-[200px] md:justify-center md:min-h-[70px] w-full hover:underline hover:decoration-gray-500"
                   >
-                    {item.name}
+                    {item.product.name}
                   </Link>
                   <p className="p-2 text-left w-full">${item.price}</p>
                   <div className="flex justify-between items-center w-full p-4 space-x-3">
@@ -68,18 +67,18 @@ const CartPage = () => {
                         "opacity-45 pointer-events-none bg-slate-300"
                       }`}
                       type="button"
-                      onClick={(e) => addtoCartHandler(item, item.qty - 1)}
+                      onClick={() => addtoCartHandler(item, item.qty - 1)}
                     >
                       <FaMinus />
                     </button>
                     <p>{item.qty}</p>
                     <button
                       className={`py-1 flex items-center justify-center border rounded-sm bg-gray-200 md:min-w-[30px] hover:bg-gray-300 ${
-                        item.qty >= item.countInStock &&
+                        item.qty >= item.product.countInStock &&
                         "opacity-45 pointer-events-none bg-slate-300"
                       }`}
                       type="button"
-                      onClick={(e) => addtoCartHandler(item, item.qty + 1)}
+                      onClick={() => addtoCartHandler(item, item.qty + 1)}
                     >
                       <FaPlus />
                     </button>
@@ -103,7 +102,7 @@ const CartPage = () => {
             <p className="text-gray-600 text-lg md:text-xl w-full">
               $
               {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .reduce((acc, item) => acc + item.qty * item.product.price, 0)
                 .toFixed(2)}
             </p>
             <button

@@ -1,5 +1,20 @@
+export interface IProduct {
+  productId: string;
+  name: string;
+  image: string;
+  description: string;
+  brand: string;
+  category: string;
+  price: number;
+  countInStock: number;
+  rating: number;
+  numReviews: number;
+  qty?: number;
+}
+
 export interface ICartItems {
   id: number;
+  product: IProduct;
   itemsPrice: number;
   shippingPrice: number;
   taxPrice: number;
@@ -23,20 +38,6 @@ export interface ICart {
   shippingTotalPrice?: number;
   taxTotalPrice?: number;
   totalFinalPrice?: number;
-}
-
-export interface IProduct {
-  productId: string;
-  name: string;
-  image: string;
-  description: string;
-  brand: string;
-  category: string;
-  price: number;
-  countInStock: number;
-  rating: number;
-  numReviews: number;
-  qty?: number;
 }
 
 export interface IUser {
