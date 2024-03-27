@@ -31,6 +31,12 @@ const cartSlice = createSlice({
     },
     clearCartItems: (state: ICart) => {
       state.cartItems = [];
+      state.shippingAddress = {
+        address: "",
+        city: "",
+        country: "",
+        postalCode: "",
+      };
       return updateCart(state);
     },
     saveShippingAddress: (
